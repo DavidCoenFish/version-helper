@@ -1,0 +1,16 @@
+{
+  "prepend": "",
+  "major": 0,
+  "minor": 3,
+  "patch": 1,
+  "metadata": [
+    {
+      "type": "factorydate",
+      "format": "localYYYYMMDDHHMMSS"
+    },
+    {
+      "type": "factorycount",
+      "value": 5
+    }
+  ]
+}

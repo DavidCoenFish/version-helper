@@ -1,0 +1,156 @@
+#!/usr/bin/env node
+
+const VersionHelper = require("../index.js")
+const Version = require("../version.js")
+const packageName = require("../package.json").name
+const packageVersion = require("../package.json").version
+
+main(process.argv.slice(2));
+
+function main(in_argv) {
+	if (0 == in_argv.length) {
+		return help();
+	}
+
+	var version = VersionHelper.new();
+	var printVersion = true;
+
+	while (0 != in_argv.length) {
+		const token = in_argv.shift()
+
+		if (true === consumeCommandLine(Version.arrayFactory, token, "-ap", "--addprerelease", VersionHelper.addPreReleaseFactory, in_argv)){
+			continue;
+		}
+
+		if (true === consumeCommandLine(Version.arrayFactory, token, "-am", "--addmetadata", VersionHelper.addMetadataFactory, in_argv)){
+			continue;
+		}
+
+		switch (token) {
+			default:
+			case "-h": case "--help": case "-?":
+				help();
+				printVersion = false;
+				return;
+			case "-a": case "--assign":
+				VersionHelper.assign(version, in_argv.shift());
+				break;
+			case "-u": case "--update":
+				VersionHelper.update(version);
+				break;
+			case "-c": case "--clear":
+				VersionHelper.clear(version);
+				break;
+			case "-im": case "--incrementmajor":
+				VersionHelper.incrementMajor(version);
+				break;
+			case "-in": case "--incrementminor":
+				VersionHelper.incrementMinor(version);
+				break;
+			case "-ip": case "--incrementpatch":
+				VersionHelper.incrementPatch(version);
+				break;
+			case "-cp": case "--clearprerelease":
+				VersionHelper.clearPreRelease(version);
+				break;
+			case "-cm": case "--clearmetadata":
+				VersionHelper.clearMetadata(version);
+				break;
+			case "-l": case "--load":
+				version = VersionHelper.load(in_argv.shift());
+				break;
+			case "-s": case "--save":
+				VersionHelper.save(version, in_argv.shift());
+				break;
+			case "-r": case "--readpackage":
+				version = VersionHelper.readPackage(in_argv.shift());
+				break;
+			case "-w": case "--writepackage":
+				VersionHelper.writePackage(version, in_argv.shift());
+				break;
+		}
+	}
+
+	if (true === printVersion){
+		console.log(version.toString());
+	}
+
+	process.exit(0);
+	return;
+}
+
+function help () {
+	const arrayData = [packageName + " " + packageVersion,
+		"helper to generate Semantic Versioning 2.0.0 https://semver.org/",
+		"usage:",
+		"    version-helper [option [option param]]...",
+		"        prints the current version string or help text",
+		"",
+		"sample:",
+		"    version-helper -a v0.0.0 -amd localYYYYMMDDHHMMSS -amb 0 -s versiondata.json",
+		"        assign version string v0.0.0 and add metadata for date and build count and save as versiondata.json",
+		"    version-helper -l versiondata.json -w package.json -s versiondata.json",
+		"        load versiondata.json (which will increment the build count), write to a package.json and save as versiondata.json",
+		"",
+		"options:",
+		"-h --help -?",
+		"    generate this text",
+		"-a --assign <input>",
+		"    assign a semantic version 2.0.0 string to the current version",
+		"-c --clear",
+		"    clear the current version",
+		"-u --update",
+		"    increment any build counts, and other factories that implement update",
+		"-im --incrementmajor",
+		"    increment the major value of the current version, sets minor and patch to zero",
+		"-in --incrementminor",
+		"    increment the minor value of the current version, sets patch to zero",
+		"-ip --incrementpatch",
+		"    increment the patch value of the current version",
+		"-cp --clearprerelease",
+		"    clear the prerelease portion of the current version",
+		"-cm --clearmetadata",
+		"    clear the metadata portion of the current version",
+		"-l --load <filepath>",
+		"    load json data from filepath into the current version",
+		"-s --save <filepath>",
+		"    save to json data at filepath from the current version",
+		"-r --readpackage <filepath>",
+		"    read the version string from package at filepath into the current version",
+		"-w --writepackage <filepath>",
+		"    set the version string into the package at filepath from the current version",
+	];
+
+	appendHelperText(Version.arrayFactory, "-ap", "--addprerelease", "preRelease portion", arrayData);
+	appendHelperText(Version.arrayFactory, "-am", "--addmetadata", "metadata portion", arrayData);
+
+	const message = arrayData.join("\n");
+	console.log(message);
+}
+
+function consumeCommandLine(in_arrayFactory, in_token, in_shortPrePend, in_longPrePend, in_addFactoryCallback, in_argv){
+	for (var index = 0, total = in_arrayFactory.length; index < total; index++) {
+		const module = in_arrayFactory[index];
+		const shortToken = in_shortPrePend + module.commandLineShortName; 
+		const longToken = in_longPrePend + module.commandLineLongName; 
+		if ((in_token != shortToken) && (in_token !=  longToken)){
+			continue;
+		}
+
+		const param = in_argv.shift();
+		const factoryObject = module.factory(param);
+		in_addFactoryCallback(factoryObject);
+
+		return true;
+	}
+	return false;
+}
+
+function appendHelperText(in_arrayFactory, in_shortPrePend, in_longPrePend, in_niceName, out_arrayData){
+	for (var index = 0, total = in_arrayFactory.length; index < total; index++) {
+		const module = in_arrayFactory[index];
+		out_arrayData.push( in_shortPrePend + module.commandLineShortName + " " + in_longPrePend + module.commandLineLongName + " <input>");
+		out_arrayData.push("    " + in_niceName + " " + module.helpText);
+	}
+	return;
+}

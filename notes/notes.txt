@@ -1,0 +1,11 @@
+
+	for (var index = 0, total = this.m_exclusiveArray.length; index < total; index++) {
+		var node = this.m_exclusiveArray[index];
+
+	for (key in in_baseDocumentData) {
+		if (false === in_baseDocumentData.hasOwnProperty(key)) {
+			continue;
+		}
+
+
+D:\development\modules\version-helper>"C:\Program Files\7-Zip\7z.exe" x -otest version-helper-0.2.0.tgz

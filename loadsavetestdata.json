@@ -1,0 +1,26 @@
+{
+  "prepend": "=",
+  "major": 0,
+  "minor": 5,
+  "patch": 1,
+  "prerelease": [
+    {
+      "type": "factoryconstant",
+      "value": "alpha"
+    },
+    {
+      "type": "factoryconstant",
+      "value": "foo"
+    }
+  ],
+  "metadata": [
+    {
+      "type": "factoryconstant",
+      "value": "bar"
+    },
+    {
+      "type": "factorycount",
+      "value": 0
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "name": "version-helper",
+  "version": "0.3.1+20180530085503.5",
+  "description": "helper to generate version string",
+  "main": "index.js",
+  "scripts": {
+    "test": "node bin/unittest",
+    "test_vsc": "node --nolazy --inspect-brk=5858 bin/unittest",
+    "inc_major": "node --nolazy --inspect-brk=5858 bin/version-helper --load versionhelper.json -u --incrementmajor --writepackage package.json --save versionhelper.json",
+    "inc_minor": "node --nolazy --inspect-brk=5858 bin/version-helper --load versionhelper.json -u --incrementminor --writepackage package.json --save versionhelper.json",
+    "inc_patch": "node --nolazy --inspect-brk=5858 bin/version-helper --load versionhelper.json -u --incrementpatch --writepackage package.json --save versionhelper.json",
+    "update": "node --nolazy --inspect-brk=5858 bin/version-helper --load versionhelper.json -u --writepackage package.json --save versionhelper.json"
+  },
+  "keywords": [
+    "version"
+  ],
+  "dependencies": {
+    "node-cmd": "^3.0.0"
+  },
+  "author": "David Coen",
+  "license": "ISC",
+  "bin": {
+    "version-helper": "./bin/version-helper"
+  },
+  "files": [
+    "bin",
+    "factory",
+    "README.md",
+    "util.js",
+    "version.js",
+    "versionhelper.json",
+    "webpackpluginversion.js"
+  ]
+}

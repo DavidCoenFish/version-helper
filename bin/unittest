@@ -1,0 +1,197 @@
+#!/usr/bin/env node
+const VersionHelper = require("../index.js")
+const Util = require("../util.js")
+const FactoryConstant = require("./../factory/factoryconstant.js");
+const FactoryCount = require("./../factory/factorycount.js");
+const FactoryDate = require("./../factory/factorydate.js");
+
+main();
+
+function main() {
+	const testFactoryArray = gatherTestFactoryArray();
+	console.log((new Date()).toLocaleString());
+
+	var exitCode = 0;
+	const passCount = testFactoryArray.reduce(function(in_passCount, in_item){
+		try{
+			in_item();
+			return (in_passCount + 1);
+		} catch(error) {
+			exitCode = 1;
+			console.log("FAIL:" + error);
+		}
+		return in_passCount;
+	}, 0);
+
+	console.log("PASS:" + passCount + "/" + testFactoryArray.length);
+	process.exit(exitCode);
+	return;
+}
+
+function DealTestFail(in_message){
+	throw in_message;
+}
+
+function DealTest(in_testName, in_value, in_expected){
+	var success = (in_value === in_expected);
+	if (true != success){
+		DealTestFail(in_testName + " value: " + in_value + " expected:" + in_expected);
+	}
+
+	return;
+}
+
+function gatherTestFactoryArray(){
+	const result = [];
+
+	result.push(utilTest);
+	result.push(simpleTest);
+	result.push(test);
+	result.push(parseTest);
+	result.push(prependTest);
+	result.push(preReleaseTest);
+	result.push(metadataTest);
+	result.push(jsonTest);
+	result.push(loadSaveTest);
+
+	return result;
+}
+
+function utilTest(){
+	const testName = "utilTest";
+	DealTest(testName + " 0", Util.cleanString("!@#$%^&*()_+=[]{};:|\\,.<>?/~`\"1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM-"), "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM-");
+
+	return;
+}
+
+function simpleTest(){
+	const testName = "simpleTest";
+	const version = VersionHelper.new();
+	DealTest(testName + " 0", version.toString(), "0.0.0");
+	VersionHelper.incrementMajor(version);
+	DealTest(testName + " 1", version.toString(), "1.0.0");
+	VersionHelper.incrementMinor(version);
+	DealTest(testName + " 2", version.toString(), "1.1.0");
+	VersionHelper.incrementPatch(version);
+	DealTest(testName + " 3", version.toString(), "1.1.1");
+	VersionHelper.incrementMinor(version);
+	DealTest(testName + " 4", version.toString(), "1.2.0");
+	VersionHelper.incrementPatch(version);
+	DealTest(testName + " 5", version.toString(), "1.2.1");
+	VersionHelper.incrementMajor(version);
+	DealTest(testName + " 6", version.toString(), "2.0.0");
+	VersionHelper.incrementMinor(version);
+	DealTest(testName + " 7", version.toString(), "2.1.0");
+	VersionHelper.incrementPatch(version);
+	DealTest(testName + " 8", version.toString(), "2.1.1");
+	VersionHelper.incrementPatch(version);
+	DealTest(testName + " 9", version.toString(), "2.1.2");
+	VersionHelper.clear(version);
+	DealTest(testName + " 10", version.toString(), "0.0.0");
+
+	return;
+}
+
+function test(){
+	const testName = "simpleTest";
+	const version = VersionHelper.new();
+	version.setPrePend("v");
+	version.setMajor(100);
+	version.setMinor(200);
+	version.setPatch(300);
+	VersionHelper.addPreReleaseFactory(version, FactoryConstant.factory("test-T.E.S.T_01?\1!@#$%^&*()_+=[]{};:|\\,.<>?/~`\""));
+	VersionHelper.addMetadataFactory(version, FactoryConstant.factory("test-T.E.S.T_0?+ 2"));
+	DealTest(testName + " 0", version.toString(), "v100.200.300-test-TEST01+test-TEST02");
+	return;
+}
+
+function parseTest(){
+	const testName = "parseTest";
+	const version = VersionHelper.new();
+	version.parse("=99.3.7-.abba...dappa.+fubar.zapper");
+	DealTest(testName + " 0", version.toString(), "=99.3.7-.abba...dappa.+fubar.zapper");
+	return;
+}
+
+function prependTest(){
+	const testName = "prependTest";
+	const version = VersionHelper.new();
+	version.setPrePend("v");
+	VersionHelper.incrementMajor(version);
+	VersionHelper.incrementPatch(version);
+	DealTest(testName + " 0", version.toString(), "v1.0.1");
+	return;
+}
+
+function preReleaseTest(){
+	const testName = "preReleaseTest";
+	const version = VersionHelper.new();
+	VersionHelper.addPreReleaseFactory(version, FactoryConstant.factory("alpha"));
+	VersionHelper.addPreReleaseFactory(version, FactoryConstant.factory(5));
+	DealTest(testName + " 0", version.toString(), "0.0.0-alpha.5");
+	return;
+}
+
+function metadataTest(){
+	const testName = "metadataTest";
+	const version = VersionHelper.new();
+	VersionHelper.addMetadataFactory(version, FactoryConstant.factory("metadata"));
+	VersionHelper.addMetadataFactory(version, FactoryConstant.factory(5));
+	DealTest(testName + " 0", version.toString(), "0.0.0+metadata.5");
+	VersionHelper.clear(version);
+	VersionHelper.addMetadataFactory(version, FactoryDate.factory("localYYYYMMDDHHMMSS"));
+	DealTest(testName + " 1", version.toString().length, "0.0.0+XXXXXXXXXXXXXX".length);
+	VersionHelper.clear(version);
+	VersionHelper.addMetadataFactory(version, FactoryCount.factory(7));
+	DealTest(testName + " 1", version.toString(), "0.0.0+7");
+
+	return;
+}
+
+function jsonTest(){
+	const testName = "jsonTest";
+	const version = VersionHelper.new();
+
+	version.setPrePend("v");
+	version.setMajor(100);
+	version.setMinor(200);
+	version.setPatch(300);
+	VersionHelper.addPreReleaseFactory(version, FactoryConstant.factory("alpha"));
+	VersionHelper.addPreReleaseFactory(version, FactoryConstant.factory("foo"));
+	VersionHelper.addMetadataFactory(version, FactoryConstant.factory("bar"));
+	VersionHelper.addMetadataFactory(version, FactoryCount.factory());
+
+	const jsonObject = VersionHelper.toJson(version);
+
+	const version2 = VersionHelper.jsonParse(jsonObject);
+	version2.update();
+	DealTest(testName + " 0", version2.toString(), "v100.200.300-alpha.foo+bar.1");
+
+	const jsonObject2 = VersionHelper.toJson(version2);
+	const version3 = VersionHelper.jsonParse(jsonObject2);
+	version3.update();
+	DealTest(testName + " 1", version3.toString(), "v100.200.300-alpha.foo+bar.2");
+	
+	return;
+}
+
+function loadSaveTest(){
+	const testName = "loadSaveTest";
+	const version = VersionHelper.new();
+
+	version.setPrePend("=");
+	version.setMajor(0);
+	version.setMinor(5);
+	version.setPatch(1);
+	VersionHelper.addPreReleaseFactory(version, FactoryConstant.factory("alpha"));
+	VersionHelper.addPreReleaseFactory(version, FactoryConstant.factory("foo"));
+	VersionHelper.addMetadataFactory(version, FactoryConstant.factory("bar"));
+	VersionHelper.addMetadataFactory(version, FactoryCount.factory());
+
+	VersionHelper.save(version, "loadsavetestdata.json");
+	const version2 = VersionHelper.load("loadsavetestdata.json");
+	version2.update();
+
+	DealTest(testName + " 0", version2.toString(), "=0.5.1-alpha.foo+bar.1");
+	DealTest(testName + " 1", version.toString(), "=0.5.1-alpha.foo+bar.0");
+}
