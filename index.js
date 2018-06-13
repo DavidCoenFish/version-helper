@@ -6,6 +6,11 @@ const FactoryCount = require("./factory/factorycount.js");
 const FactoryDate = require("./factory/factorydate.js");
 const FactoryGitVersion = require("./factory/factorygitversion.js");
 
+module.exports.FactoryConstant = FactoryConstant;
+module.exports.FactoryCount = FactoryConstant;
+module.exports.FactoryDate = FactoryConstant;
+module.exports.FactoryGitVersion = FactoryGitVersion;
+
 module.exports.loadUpdateSaveReturnVersionString = function(in_filePath){
 	const version = module.exports.load(in_filePath);
 	version.update();
@@ -52,13 +57,6 @@ module.exports.incrementPatch = function(in_version){
 	return;
 }
 
-/*
-module.exports.addPreRelease = function(in_version, in_string){
-	in_version.addPreReleaseFactory(FactoryConstant.factory(in_string));
-	return;
-}
-*/
-
 module.exports.addPreReleaseFactory = function(in_version, in_factory){
 	in_version.addPreReleaseFactory(in_factory);
 	return;
@@ -74,27 +72,6 @@ module.exports.addMetadataFactory = function(in_version, in_factory){
 	return;
 }
 
-/*
-module.exports.addMetadata = function(in_version, in_string){
-	in_version.addMetadataFactory(FactoryConstant.factory(in_string));
-	return;
-}
-
-module.exports.addMetadataDate = function(in_version, in_string){
-	in_version.addMetadataFactory(FactoryDate.factory(in_string));
-	return;
-}
-
-module.exports.addMetadataCounter = function(in_version, in_string){
-	in_version.addMetadataFactory(FactoryCount.factory(in_string));
-	return;
-}
-
-module.exports.addMetadataGitVersion = function(in_version){
-	in_version.addMetadataFactory(FactoryGitVersion.factory());
-	return;
-}
-*/
 module.exports.clearMetadata = function(in_version){
 	in_version.clearMetadata();
 	return;
