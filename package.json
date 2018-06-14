@@ -1,6 +1,6 @@
 {
   "name": "version-helper",
-  "version": "0.3.1+20180530085503.5",
+  "version": "0.3.2+20180614103057.6",
   "description": "helper to generate version string",
   "main": "index.js",
   "scripts": {
@@ -14,22 +14,21 @@
   "keywords": [
     "version"
   ],
-  "dependencies": {
-    "node-cmd": "^3.0.0"
-  },
+  "dependencies": {},
   "author": "David Coen",
   "license": "unlicense",
   "bin": {
     "version-helper": "./bin/version-helper"
   },
-"repository" :
-  { "type" : "git", 
-  "url" : "https://github.com/DavidCoenFish/version-helper.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DavidCoenFish/version-helper.git"
   },
   "homepage": "https://github.com/DavidCoenFish/version-helper",
   "files": [
     "bin",
     "factory",
+    "LICENSE",
     "README.md",
     "util.js",
     "version.js",

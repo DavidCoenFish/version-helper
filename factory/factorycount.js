@@ -6,7 +6,7 @@ const sModuleNameCount = "factorycount"; //is there a better way to get module n
 module.exports.name = sModuleNameCount;
 module.exports.commandLineShortName = "b";
 module.exports.commandLineLongName = "buildcount";
-module.exports.helpText = "Build count: generate a numeric that increments on each time the version data is parsed input:<0 <= numeric>";
+module.exports.helpText = "Build count: generate a numeric that increments on each time the version object has update method called";
 
 const factory = function(in_valueOrUndefined){
 	const value = Util.cooerceNumeric(in_valueOrUndefined);
