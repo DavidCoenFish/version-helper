@@ -18,7 +18,7 @@
     "node-cmd": "^3.0.0"
   },
   "author": "David Coen",
-  "license": "ISC",
+  "license": "unlicense",
   "bin": {
     "version-helper": "./bin/version-helper"
   },

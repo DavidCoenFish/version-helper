@@ -95,18 +95,12 @@ options:
     preRelease portion Build count: generate a numeric that increments on each time the version data is parsed input:<0 <= numeric>
 -apd --addprereleasedate <input>
     preRelease portion Date: generate a string based on the current date input:<localYYYYMMDD, localYYYYMMDDHHMMSS, localDDMMYYYY, UTCYYYYMMDD, UTCYYYYMMDDDDHHMMSS, UTCDDMMYYYY>
--apg --addprereleasegitversion <input>
-    preRelease portion unimplement: get the git version string for current dir?
-input:<?>
 -amc --addmetadataconstant <input>
     metadata portion Constant string: generate a static string input:<string [a-zA-Z0-9-]>
 -amb --addmetadatabuildcount <input>
     metadata portion Build count: generate a numeric that increments on each time the version data is parsed input:<0 <= numeric>
 -amd --addmetadatadate <input>
     metadata portion Date: generate a string based on the current date input: <localYYYYMMDD, localYYYYMMDDHHMMSS, localDDMMYYYY, UTCYYYYMMDD, UTCYYYYMMDDDDHHMMSS, UTCDDMMYYYY>
--amg --addmetadatagitversion <input>
-    metadata portion unimplement: get the git version string for current dir? input:<?>
-
 ```
 
 

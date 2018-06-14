@@ -4,12 +4,12 @@ const Version = require("./version.js")
 const FactoryConstant = require("./factory/factoryconstant.js");
 const FactoryCount = require("./factory/factorycount.js");
 const FactoryDate = require("./factory/factorydate.js");
-const FactoryGitVersion = require("./factory/factorygitversion.js");
+const WebpackVersionPlugin = require("./webpackpluginversion.js");
 
 module.exports.FactoryConstant = FactoryConstant;
 module.exports.FactoryCount = FactoryConstant;
 module.exports.FactoryDate = FactoryConstant;
-module.exports.FactoryGitVersion = FactoryGitVersion;
+module.exports.WebpackVersionPlugin = WebpackVersionPlugin;
 
 module.exports.loadUpdateSaveReturnVersionString = function(in_filePath){
 	const version = module.exports.load(in_filePath);
