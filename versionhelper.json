@@ -2,7 +2,7 @@
   "prepend": "",
   "major": 0,
   "minor": 3,
-  "patch": 2,
+  "patch": 3,
   "metadata": [
     {
       "type": "factorydate",
@@ -10,7 +10,7 @@
     },
     {
       "type": "factorycount",
-      "value": 6
+      "value": 7
     }
   ]
 }

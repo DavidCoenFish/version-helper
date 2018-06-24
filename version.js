@@ -39,10 +39,10 @@ const WalkSync = function (currentDirPath, callback) {
 
 const GatherArrayModules = function(in_path, inout_arrayModules) {
 	const searchPath = Path.join(__dirname, in_path);
-	//console.log("searchPath:" + searchPath);
+	console.log("searchPath:" + searchPath);
 	WalkSync(searchPath, function(filePath, name){
-		var testPath = "./" + Path.relative(__dirname, filePath).replace(/\\/g, "/");
-		//console.log("testPath:" + name);
+		var testPath = "." + Path.sep + Path.relative(__dirname, filePath);
+		console.log("testPath:" + name);
 		try{
 			const module = require(testPath);
 			inout_arrayModules.push(module);
@@ -54,7 +54,7 @@ const GatherArrayModules = function(in_path, inout_arrayModules) {
 }
 
 var sArrayFactory = [];
-GatherArrayModules("\\factory\\", sArrayFactory);
+GatherArrayModules("factory", sArrayFactory);
 module.exports.arrayFactory = sArrayFactory;
 
 const DscVersion = function(
